@@ -36,7 +36,6 @@ module.exports = app => {
     res.send(blogs);
 
     client.set(req.user.id, JSON.stringify(blogs))
-      client.flushall();
   });
 
   app.post('/api/blogs', requireLogin, async (req, res) => {
@@ -56,3 +55,42 @@ module.exports = app => {
     }
   });
 };
+
+
+//
+// Person
+//     .find({ occupation: /host/ })
+//     .where('name.last').equals('Ghost')
+//     .where('age').gt(17).lt(66)
+//     .where('likes').in(['vaporizing', 'talking'])
+//     .limit(10)
+//     .sort('-occupation')
+//     .select('name occupation')
+//
+//     // CHECK TO SEE IF THIS QUERY HAS ALREADY BEEN FETCHED IN REDIS
+//
+//     // TO MAKE REUSABLE CODE, OVERWRITE query,exec()
+//         query.exec(function () {
+//             // check to see if this query has already been executed and if it has return result right away
+//             const result = client.get('query key')
+//             if (result) {
+//               return result;
+//             }
+//
+//             // otherwise issue the query as normal then save in redis
+//             const result = runTheOriginalQueryExecFunction();
+//
+//             // then save the value in redis
+//             client.set('query key', result);
+//
+//             return result;
+//         })
+//     //
+//
+//     .exec(callback);
+//   query.exec((err, result) => console.log(result));
+//   // Same as...
+//   query.then(result => console.log(result));
+//   // Same as...
+//   const result = await query;
+
