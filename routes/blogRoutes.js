@@ -14,28 +14,9 @@ module.exports = app => {
   });
 
   app.get('/api/blogs', requireLogin, async (req, res) => {
-    const redis = require('redis');
-    const redisUrl = 'redis://127.0.0.1:6379';
-    const client = redis.createClient(redisUrl);
-    const util = require('util');
-    client.get = util.promisify(client.get);
-
-    // Do we have any cached data in redis related to this query
-    const cachedBlogs = await client.get(req.user.id);
-
-    // If yes, then respond to the request right away and return
-    if (cachedBlogs) {
-      console.log('SERVING FROM CACHE');
-      return res.send(JSON.parse(cachedBlogs));
-    }
-
-    // if no, we need to respond to request and update our cache to store the data
     const blogs = await Blog.find({ _user: req.user.id });
 
-    console.log('SERVING FROM MONGODB');
-    res.send(blogs);
-
-    client.set(req.user.id, JSON.stringify(blogs))
+    res.send(blogs)
   });
 
   app.post('/api/blogs', requireLogin, async (req, res) => {
@@ -55,42 +36,4 @@ module.exports = app => {
     }
   });
 };
-
-
-//
-// Person
-//     .find({ occupation: /host/ })
-//     .where('name.last').equals('Ghost')
-//     .where('age').gt(17).lt(66)
-//     .where('likes').in(['vaporizing', 'talking'])
-//     .limit(10)
-//     .sort('-occupation')
-//     .select('name occupation')
-//
-//     // CHECK TO SEE IF THIS QUERY HAS ALREADY BEEN FETCHED IN REDIS
-//
-//     // TO MAKE REUSABLE CODE, OVERWRITE query,exec()
-//         query.exec(function () {
-//             // check to see if this query has already been executed and if it has return result right away
-//             const result = client.get('query key')
-//             if (result) {
-//               return result;
-//             }
-//
-//             // otherwise issue the query as normal then save in redis
-//             const result = runTheOriginalQueryExecFunction();
-//
-//             // then save the value in redis
-//             client.set('query key', result);
-//
-//             return result;
-//         })
-//     //
-//
-//     .exec(callback);
-//   query.exec((err, result) => console.log(result));
-//   // Same as...
-//   query.then(result => console.log(result));
-//   // Same as...
-//   const result = await query;
 
