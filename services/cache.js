@@ -17,9 +17,12 @@ mongoose.Query.prototype.exec = async function () {
 
     // if we do, return that
     if (cacheValue) {
-        console.log(cacheValue);
+        console.log(this);
+        const doc = new this.model(JSON.parse(cacheValue));
 
-        return JSON.parse(cacheValue);
+        return doc;
+
+        // return JSON.parse(cacheValue); // the exec function expect to return a mongoose document not json
     }
 
     // Otherwise, issue the query and store the result in redis
