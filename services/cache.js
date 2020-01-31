@@ -17,11 +17,23 @@ mongoose.Query.prototype.exec = async function () {
 
     // if we do, return that
     if (cacheValue) {
-        console.log(cacheValue)
+        console.log(cacheValue);
+
+        return JSON.parse(cacheValue);
     }
 
     // Otherwise, issue the query and store the result in redis
     const result = await exec.apply(this, arguments)
 
-    console.log(result)
+    console.log(result);  // type is mongoose document, ModelInstance, not a js object
+    console.log(result.validate);
+    // [Function: wrappedPointCut] {
+    //     '$originalFunction': '$__original_validate',
+    //            '$isWrapped': true
+    // }
+
+    // Set result as a string in redis
+    client.set(key, JSON.stringify(result));
+
+    return result;
 };
