@@ -35,7 +35,8 @@ mongoose.Query.prototype.exec = async function () {
     const result = await exec.apply(this, arguments);
 
     // Set result as a string in redis
-    client.set(key, JSON.stringify(result));
+    // expiration
+    client.set(key, JSON.stringify(result), 'EX', 10);
 
     return result;
 };
