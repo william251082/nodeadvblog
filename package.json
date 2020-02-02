@@ -4,7 +4,8 @@
   "description": "",
   "main": "index.js",
   "jest": {
-    "setupTestFrameworkScriptFile": "./test/setUp.js"
+    "setupTestFrameworkScriptFile": "./tests/setUp.js",
+    "testURL": "http://localhost/"
   },
   "scripts": {
     "start": "node index.js",

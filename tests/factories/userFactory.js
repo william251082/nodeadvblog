@@ -3,5 +3,6 @@ const User = mongoose.model('User');
 
 
 module.exports = () => {
+    // returns a Promise
     return new User({}).save();
 };
