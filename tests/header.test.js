@@ -45,3 +45,37 @@ test.only('When signed in, shows logout button', async () => {
 
     expect(text).toEqual('Logout');
 });
+
+console.clear();
+
+// from 3rd party library
+class Greetings {
+    english() { return 'Hello' }
+    spanish() { return 'Ola' }
+}
+
+class MoreGreetings {
+    german() { return 'Hallo' }
+    french() { return 'Bonjour' }
+}
+
+const greetings = new Greetings();
+const moreGreetings = new MoreGreetings();
+
+
+// global function in ES2015
+// arg1 --target - object that we want to manage/invoke access to
+// arg2 --handler - object that contains set of functions that are executed any time we try to get access to target arg1
+const allGreetings = new Proxy(moreGreetings, {
+    get: function (target, property) {
+        console.log('string representation of func name', property);
+        return target[property] || greetings[property]
+    }
+});
+
+// reference func name
+allGreetings.french
+allGreetings.ReferenceEvenPropertiesThatDontExist
+
+console.log(allGreetings.german);
+console.log(allGreetings.english());
