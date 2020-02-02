@@ -11,7 +11,7 @@ beforeEach(async () => {
     });
 
 afterEach(async () => {
-    await browser.close();
+    // await browser.close();
 });
 
 test('We can launch a browser', async () => {
@@ -28,15 +28,15 @@ test('clicking login starts oauth flow', async () => {
     expect(url).toMatch(/accounts\.google\.com/)
 });
 
-test('When signed in, shows logout button', async () => {
-    // Take the session id to generate a fake session
-    const id = 'w8wmbz5tMAL26-Ip1XkfPNoj1Ws';
+test.only('When signed in, shows logout button', async () => {
+    // Take the session.sig id to generate a fake session
+    const user_id = '5e33e21c4609525a1667f644';
 
     // create a fake session object
     const Buffer = require('safe-buffer').Buffer;
     const sessionObject = {
         passport: {
-            user: id
+            user: user_id
         }
     };
 
@@ -50,4 +50,8 @@ test('When signed in, shows logout button', async () => {
     const sig = keygrip.sign('session=' + sessionString);
 
     console.log(sessionString, sig)
+
+    await page.setCookie({ name: 'session', value: sessionString });
+    await page.setCookie({ name: 'session.sig', value: sig });
+    await page.goto('localhost:3000');
 });
