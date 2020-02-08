@@ -37,6 +37,36 @@ class CustomPage {
     async getContentsOf(selector) {
         return this.page.$eval(selector, el => el.innerHTML);
     }
+
+    get(path) {
+        //arg2 of evaluate is the variable to pass inside arg1: string
+        return this.page.evaluate(
+            (_path) => {
+                return fetch(_path, {
+                    method: 'GET',
+                    credentials: 'same-origin',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    }
+                }).then(res => res.json());
+            }, path
+        );
+    }
+
+    post(path, data) {
+        return this.page.evaluate(
+            (_path, _data) => {
+                return fetch(_path, {
+                    method: 'POST',
+                    credentials: 'same-origin',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(_data)
+                }).then(res => res.json());
+            }, path, data
+        );
+    }
 }
 
 module.exports = CustomPage;
