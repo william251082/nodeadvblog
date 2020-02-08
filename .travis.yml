@@ -13,3 +13,11 @@ cache:
   - client/node_modules
 install:
   - npm install
+  - npm run build
+script:
+#  start up npm run start in the background
+  - nohup npm run start &
+# wait till the servers start
+  - sleep 3
+  - npm run test
+
