@@ -80,4 +80,20 @@ describe('User is not logged in', async () => {
         console.log(result);
         expect(result).toEqual({ error: 'You must log in!' })
     });
+
+    test('User can not get list of blog posts', async () => {
+        const result = await page.evaluate(
+            () => {
+                return fetch('/api/blogs', {
+                    method: 'GET',
+                    credentials: 'same-origin',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    }
+                }).then(res => res.json());
+            }
+        );
+
+        expect(result).toEqual({ error: 'You must log in!' });
+    });
 });
